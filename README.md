@@ -3,7 +3,7 @@
 
 【ファイル構成】
 
-解析用コード：　　.Rmd
+解析用コード：analysis_sample.Rmd
 
 サンプルデータ①：260116 a1c505aeh r1ph r2_55 std.csv
 
