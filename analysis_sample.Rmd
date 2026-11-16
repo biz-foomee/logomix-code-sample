@@ -1,0 +1,156 @@
+---
+title: "sample"
+author: "KT"
+date: "2026-11-16"
+output: html_document
+---
+
+# Setup package
+
+```{r}
+targetPackages <- c('data.table',
+                    'dplyr',
+                    'flextable',
+                    'janitor',
+                    'ggbeeswarm',
+                    'ggforce',
+                    'gghighlight',
+                    'ggplot2', 
+                    'ggpubr',
+                    'ggpmisc',
+                    'ggrepel',
+                    'gridExtra',
+                    'gt',
+                    'magrittr',
+                    'mcr',        # Deming / Passing-Bablok 回帰
+                    'mmtable2',
+                    'officer',
+                    'patchwork',
+                    'plot3D',
+                    'purrr',
+                    'readxl',
+                    'showtext',
+                    'stringr',
+                    'tibble',
+                    'tidyr',
+                    'zoo') 
+
+newPackages <- targetPackages[!(targetPackages %in% 
+                                  installed.packages()[,"Package"])]
+if(length(newPackages))
+  install.packages(newPackages, repos = "http://cran.us.r-project.org")
+for(package in targetPackages)
+  library(package, character.only = T)
+options(scipen = 10000)
+#windowsFonts(Meiryo = windowsFont("Meiryo")) 
+#theme_set(theme_gray(base_family = "Meiryo"))
+```
+
+# 260116 505AEH R1 pH (R2:pH5.515)
+
+```{r}
+#a1c.path <- "D:/R/data/immunoturbidimetry_data/a1c/2nd/std"
+#fl <- list.files(list.files(a1c.path, pattern = "r1ph", full.names = T),
+#                 pattern = ".csv", full.names = T)
+#a1c.acc <- do.call(rbind, lapply(fl, fread, skip = 1, header = F))
+
+item.lev <- c("505AEH", paste0("pH", c(6.954, 7.251, 7.471, 7.757, 8.135, 8.244, 8.540, 8.755, 8.956)))
+
+a1cCal <- c(0, 5.9, 9.0, 13.2, 16.0)
+
+file_name <- "a1c R1_pH.pdf"
+```
+
+# 260310 004afc primAb conc
+
+```{r}
+#a1c.path <- "D:/R/data/immunoturbidimetry_data/a1c/2nd/std"
+#fl <- list.files(list.files(a1c.path, pattern = "ac_prim_1", full.names = T),
+#                 pattern = ".csv", full.names = T)
+#a1c.acc <- do.call(rbind, lapply(fl, fread, skip = 1, header = F))
+
+item.lev <- paste0(seq(0.5, 1.5, by = 0.25), "% primAb")
+
+a1cCal <- c(0, 5.9, 9.0, 13.2, 16.0)
+
+file_name <- "004afc primAb-1.pdf"
+```
+
+# 260310 004afc 2ndAb conc
+
+```{r}
+#a1c.path <- "D:/R/data/immunoturbidimetry_data/a1c/2nd/std"
+#fl <- list.files(list.files(a1c.path, pattern = "ac_2nd_1", full.names = T),
+#                 pattern = ".csv", full.names = T)
+#a1c.acc <- do.call(rbind, lapply(fl, fread, skip = 1, header = F))
+
+item.lev <- paste0(seq(100, 130, by = 10), "% 2ndAb")
+
+a1cCal <- c(0, 5.9, 9.0, 13.2, 16.0)
+
+file_name <- "004afc 2ndAb.pdf"
+```
+
+# graph
+
+```{r}
+a1c.ori <- a1c.acc[, !1:2] |>
+  setnames(rep(c("delta", "initial"), time = length(a1cCal) * 2)) |>
+  transform(
+    item  = rep(item.lev,  length.out = nrow(a1c.acc)),
+    item2 = if (exists("item2.lev")) rep(item2.lev, each = nrow(a1c.acc)/length(item2.lev), length.out = nrow(a1c.acc)) else NA
+  ) |>
+  pivot_longer(
+    cols = -c(item, item2),
+    names_to = "OD",
+    values_to = "meas"
+  ) |>
+  transform(
+    ID   = rep(1:2, each = 2),
+    conc = rep(a1cCal, each = 4)
+  ) |>
+  filter(OD == "delta")
+
+a1c.lab <- pivot_wider(a1c.ori,
+                       id_cols = c("item", "item2", "conc"),
+                       names_from = "ID", values_from = "meas")
+
+num_cols <- a1c.lab |>
+  select(matches("^\\d+$"))
+
+a1c.lab <- a1c.lab |>
+  mutate(mean = rowMeans(num_cols, na.rm = T)) |>
+  filter(conc == max(a1cCal))
+
+
+# plot
+has_item2 <- any(!is.na(a1c.ori$item2))
+
+a1c.std <- ggplot(a1c.ori, aes(conc, meas, color = item)) +
+  geom_line(stat = "summary", fun = mean) +
+  geom_text_repel(data = a1c.lab, aes(x = conc, y = mean, label = item), size = 3.5) +
+  labs(x = "a1c(%)", y = "OD") +
+  theme(legend.position = "none")
+
+
+#a1c.std <- a1c.std +
+#  facet_wrap(.~lot)
+# item2 があるときだけ facet を追加
+if (has_item2) {
+  a1cCf.std <- a1c.std + facet_wrap(~ item2)
+}
+
+a1c.std
+
+# PDF出力
+showtext_auto()
+
+ggsave(
+  filename = file.path("D:/R/PDF/HbA1c", file_name),
+  plot = a1c.std,
+  device = cairo_pdf,
+  width = 11.7, height = 8.3, units = "in"
+)
+
+rm(list = ls()) #消去
+```
