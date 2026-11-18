@@ -4,17 +4,18 @@ Markdown
 データ解析コードサンプルです。
 
 ### 【ファイル構成】
-* 解析用コード：`analysis_sample.Rmd`
+* 解析用コード：`analysis_template.Rmd`
 * サンプルデータ①：`ph.csv`
 * サンプルデータ②：`ab1.csv`
 * サンプルデータ③：`ab2.csv`
 
 ### 【動かし方の注意点】
-1. GitHubから各CSVファイルと `analysis_sample.Rmd` を取得
-2. 以下のコピペ用データから、グラフ化したいサンプルのコードをコピー
-3. `analysis_sample.Rmd` 先頭の `User settings` へペースト
-4. Run  
-※ブラウザからダウンロードして`.txt`になってしまった場合は`.csv`にリネームしてください。Download ZIPからのダウンロードの時はそのままでお使いください。
+1. Repository を ZIP でダウンロード
+2. 展開する
+3. `analysis_template.Rmd` を開く
+4. README 内の「コピペ用データ」から対応する`User settings`をコピー
+5. `analysis_template.Rmd`冒頭の`User settings`に貼り付ける
+6. Run All または Knit
 
 ### 【コピペ用データ】
 各ブロックを解析コードの先頭の "User settings" にコピー＆ペーストして実行してください。
