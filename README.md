@@ -13,8 +13,12 @@ Markdown
 1. Repository を ZIP でダウンロード
 2. 展開する
 3. `analysis_template.Rmd` を開く
-4. README 内の「コピペ用データ」から対応する`User settings`をコピー
-5. `analysis_template.Rmd`冒頭の"User settings"に貼り付ける
+4. README内の「コピペ用データ」から対応する User settings をコピー
+5. `analysis_template.Rmd` 冒頭の User settings に貼り付ける
+
+※ `csv_name` は data フォルダ内のサンプルデータを参照しています。
+  `analysis_template.Rmd` と data フォルダの相対位置は変更しないでください。
+
 6. Run All または Knit
 
 ### 【コピペ用データ】
