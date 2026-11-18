@@ -5,11 +5,11 @@
 
 解析用コード：analysis_sample.Rmd
 
-サンプルデータ①：260116 a1c505aeh r1ph r2_55 std.csv
+サンプルデータ①：ph.csv
 
-サンプルデータ②：260310 a1c004afc 2ndconc std.csv 
+サンプルデータ②：ab1.csv 
 
-サンプルデータ③：260310 a1c004afc primconc-1 std.csv
+サンプルデータ③：ab2.csv
 
 【動かし方の注意点】
 ① GitHubから上から各CSVファイルを取得
