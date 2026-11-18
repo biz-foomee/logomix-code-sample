@@ -13,7 +13,7 @@ Markdown
 1. GitHubから各CSVファイルと `analysis_sample.Rmd` を取得
 2. 以下のコピペ用データから、グラフ化したいサンプルのコードをコピー
 3. `analysis_sample.Rmd` 先頭の `User settings` へペースト
-4. Run
+4. Run  
 ※ブラウザからダウンロードして .txt になってしまった場合は .csv にリネームしてください。Download ZIPからのダウンロードの時はそのままでお使いください。
 
 ### 【コピペ用データ】
