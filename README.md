@@ -2,6 +2,7 @@ Markdown
 
 # code-sample
 データ解析コードサンプルです。
+本リポジトリのスクリプトはR Markdown（.Rmd）形式で作成しています。RStudioからそのまま開けるほか、通常のR環境からも `rmarkdown::render()` などで実行できます。
 
 ### 【ファイル構成】
 * 解析用コード：`analysis_template.Rmd`
